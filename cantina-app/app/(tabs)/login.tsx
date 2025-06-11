@@ -1,10 +1,15 @@
-import React from 'react';
-import { Image, View, StyleSheet, TextInput } from 'react-native';
-import { Stack } from 'expo-router';
-import { Text } from '@react-navigation/elements';
 import { Ionicons } from '@expo/vector-icons';
+import { Text } from '@react-navigation/elements';
+import { Stack } from 'expo-router';
+import React, { useState } from 'react';
+import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function Home() {
+
+  const [password, setPassword] = useState('')
+
+  const [showPassword, setShowPassword] = useState(false)
+  
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -23,7 +28,12 @@ export default function Home() {
           <View style={styles.inputContainer}>
             <Text style={styles.loginLabel}>E-mail</Text>
             <View style={styles.inputWrapper}>
-              <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+              <Ionicons 
+                name="mail-outline" 
+                size={20} 
+                color="#666" 
+                style={styles.inputIcon} 
+              />
               <TextInput
                 style={styles.loginTextInput}
                 placeholder="Digite seu e-mail"
@@ -36,19 +46,34 @@ export default function Home() {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.loginLabel}>E-mail</Text>
+            <Text style={styles.loginLabel}>Senha</Text>
             <View style={styles.inputWrapper}>
-              <Ionicons name="mail-outline" size={20} color="#666" style={styles.inputIcon} />
+              <TouchableOpacity 
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Ionicons 
+                  name={showPassword ? "eye-outline" : "eye-off-outline"} 
+                  size={20} 
+                  color="#666" 
+                  style={styles.inputIcon}
+                />
+              </TouchableOpacity>
               <TextInput
                 style={styles.loginTextInput}
-                placeholder="Digite seu e-mail"
+                placeholder="Digite sua senha"
                 placeholderTextColor="#999"
-                keyboardType="email-address"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
             </View>
           </View>
+
+          <TouchableOpacity style={styles.formButton}>
+            <Text style={styles.formButtonText}>ENTRAR</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -89,13 +114,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     textAlign: 'center',
+    paddingTop: '2%',
     color: '#666'
   },
   form: {
     width: '100%',
+    paddingTop: '20%'
+  },
+  formButton: {
+    width: '100%',
+    height: 52,
+    backgroundColor: 'rgba(76, 175, 80, 1)',
+    borderRadius: 12,
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    marginHorizontal: 'auto',
+  },
+  formButtonText: {
+    fontFamily: 'Poppins',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFF'
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 25,
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -116,11 +159,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   inputIcon: {
-    marginRight: 12,
+    paddingRight: 12,
+    paddingVertical: 12
   },
   loginLabel: {
     fontFamily: 'Poppins',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 400,
     color: '#666'
   },
@@ -128,7 +172,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     fontFamily: 'Poppins',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 400,
     color: '#666'
   },
