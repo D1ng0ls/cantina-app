@@ -4,7 +4,7 @@ import { Link, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
-export default function Login() {
+export default function Register() {
 
   const [password, setPassword] = useState('')
 
@@ -26,6 +26,26 @@ export default function Login() {
 
         <View style={styles.loginForm}>
           <View style={styles.loginFormContainer}>
+            <Text style={styles.loginFormLabel}>Nome</Text>
+            <View style={styles.loginFormWrapper}>
+              <Ionicons 
+                name="person-circle-outline" 
+                size={20} 
+                color="#666" 
+                style={styles.loginFormIcon} 
+              />
+              <TextInput
+                style={styles.loginFormInput}
+                placeholder="Digite seu nome"
+                placeholderTextColor="#999"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+          </View>
+
+          <View style={styles.loginFormContainer}>
             <Text style={styles.loginFormLabel}>E-mail</Text>
             <View style={styles.loginFormWrapper}>
               <Ionicons 
@@ -39,6 +59,26 @@ export default function Login() {
                 placeholder="Digite seu e-mail"
                 placeholderTextColor="#999"
                 keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+          </View>
+          
+          <View style={styles.loginFormContainer}>
+            <Text style={styles.loginFormLabel}>Prontuário</Text>
+            <View style={styles.loginFormWrapper}>
+              <Ionicons 
+                name="grid-outline" 
+                size={20} 
+                color="#666" 
+                style={styles.loginFormIcon} 
+              />
+              <TextInput
+                style={styles.loginFormInput}
+                placeholder="Digite seu prontuário"
+                placeholderTextColor="#999"
+                keyboardType="default"
                 autoCapitalize="none"
                 autoCorrect={false}
               />
@@ -74,8 +114,8 @@ export default function Login() {
           <TouchableOpacity style={styles.loginFormButton}>
             <Text style={styles.loginFormButtonText}>ENTRAR</Text>
           </TouchableOpacity>
-        
-          <Text style={styles.loginFormAccount}>Não tem uma conta? <Link style={styles.loginFormAccountLink} href='/register'>Registre-se já!</Link></Text>  
+
+          <Text style={styles.loginFormAccount}>Já tem uma conta? <Link style={styles.loginFormAccountLink} href='/login'>Entre!</Link></Text>
         </View>
       </View>
     </>
@@ -121,7 +161,7 @@ const styles = StyleSheet.create({
   },
   loginForm: {
     width: '100%',
-    paddingTop: '20%'
+    paddingTop: '15%'
   },
   loginFormButton: {
     width: '100%',
@@ -149,7 +189,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#e1e5e9',
-    paddingHorizontal: 16,
+    paddingRight: 16,
     height: 52,
     shadowColor: '#000',
     shadowOffset: {
@@ -161,8 +201,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   loginFormIcon: {
-    paddingRight: 12,
-    paddingVertical: 12
+    padding: 12,
   },
   loginFormLabel: {
     fontFamily: 'Poppins',

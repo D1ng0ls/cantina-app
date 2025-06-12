@@ -1,7 +1,7 @@
-import { Text, View, Button } from 'react-native';
-import { Link } from 'expo-router';
 import * as Font from 'expo-font';
+import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 
 export default function HomeScreen() {
 
@@ -24,11 +24,19 @@ export default function HomeScreen() {
     <>
       <View>
         <Text>Tela principal</Text>
+
         <Text style={{ fontFamily: 'Poppins', fontSize: 18 }}>
           Texto com fonte Poppins
+        
         </Text>
+        
         <Link href='/login'>Logar</Link>
+        
         <Link href='/perfil'>Perfil</Link>
+        
+        <Link href='/register'>Registrar</Link>
+
+        <Link href='/produtos'>Produtos</Link>
       </View>
     </>
   );
