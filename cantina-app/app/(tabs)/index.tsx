@@ -28,6 +28,7 @@ export default function HomeScreen() {
           Texto com fonte Poppins
         </Text>
         <Link href='/login'>Logar</Link>
+        <Link href='/perfil'>Perfil</Link>
       </View>
     </>
   );
