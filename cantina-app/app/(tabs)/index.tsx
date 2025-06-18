@@ -27,7 +27,6 @@ export default function HomeScreen() {
 
         <Text style={{ fontFamily: 'Poppins', fontSize: 18 }}>
           Texto com fonte Poppins
-        
         </Text>
         
         <Link href='/login'>Logar</Link>
