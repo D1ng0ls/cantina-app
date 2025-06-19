@@ -36,6 +36,8 @@ export default function HomeScreen() {
         <Link href='/register'>Registrar</Link>
 
         <Link href='/produtos'>Produtos</Link>
+
+        <Link href='/carrinho'>Carrinho</Link>
       </View>
     </>
   );
