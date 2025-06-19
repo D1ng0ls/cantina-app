@@ -31,9 +31,13 @@ export default function HomeScreen() {
         
         <Link href='/login'>Logar</Link>
         
+        <Link href='/perfil'>Perfil</Link>
+        
         <Link href='/register'>Registrar</Link>
 
         <Link href='/produtos'>Produtos</Link>
+
+        <Link href='/carrinho'>Carrinho</Link>
 
         <Link href='/pedidos'>Pedidos</Link>
       </View>
