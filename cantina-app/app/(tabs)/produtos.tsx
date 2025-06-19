@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     position: 'relative',
-    marginBottom: 1,
     height: 110
   },  
   productEven: {
