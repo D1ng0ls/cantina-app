@@ -72,12 +72,14 @@ export default function Carrinho(){
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={style.main}>
-                <Link href='/'>
-                    <TouchableOpacity>
-                        <AntDesign name="arrowleft" size={24} color="#4CAF50" />
-                    </TouchableOpacity>
-                </Link>
-                <Text style={style.nPedido}>Número do Pedido 12345</Text>
+                <View style={style.inicio}>
+                    <Link href='/'>
+                        <TouchableOpacity>
+                            <AntDesign name="arrowleft" size={35} color="#4CAF50" />
+                        </TouchableOpacity>
+                    </Link>
+                    <Text style={style.nPedido}>Número do Pedido 12345</Text>
+                </View>
                 <FlatList
                 data={DATA}
                 keyExtractor={(item) => item.id}
@@ -110,6 +112,9 @@ export default function Carrinho(){
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            <View style={style.rodape}>
+                <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
+            </View>
         </>
     )
 }
@@ -155,6 +160,9 @@ const style = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
     },
+    inicio:{
+        flexDirection:"row"
+    },
     title: {
         fontSize: 16,
     },
@@ -181,4 +189,7 @@ const style = StyleSheet.create({
         fontSize: 25,
         textAlign:'center'  
     },
+    rodape:{
+        flexDirection: 'row-reverse',
+    }
 })
