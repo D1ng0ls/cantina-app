@@ -7,6 +7,7 @@ import { Link } from 'expo-router';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Footer from '@/components/rodape/footer';
 
 const DATA = [
   {
@@ -64,12 +65,6 @@ export default function Carrinho(){
             <View style={style.header}>
                 <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
                 <Text style={style.texto}>Cantina</Text>
-                <TouchableOpacity>
-                    <AntDesign name="search1" size={24} color="#4CAF50" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Entypo name="menu" size={24} color="#4CAF50" />
-                </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={style.main}>
                 <View style={style.inicio}>
@@ -112,9 +107,7 @@ export default function Carrinho(){
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-            <View style={style.rodape}>
-                <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
-            </View>
+            <Footer />
         </>
     )
 }

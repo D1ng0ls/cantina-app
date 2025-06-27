@@ -1,12 +1,12 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Text } from '@react-navigation/elements';
-import Entypo from '@expo/vector-icons/Entypo';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { ScrollView } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useState } from 'react';
 import { Link } from 'expo-router';
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import Footer from '@/components/rodape/footer';
 
 const DATA = [
   {
@@ -44,12 +44,6 @@ export default function Perfil(){
             <View style={style.header}>
                     <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
                     <Text style={style.texto}>Cantina</Text>
-                    <TouchableOpacity>
-                        <AntDesign name="search1" size={24} color="#4CAF50" />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Entypo name="menu" size={24} color="#4CAF50" />
-                    </TouchableOpacity>
             </View>
              <ScrollView contentContainerStyle={style.perfil} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                 <View style={style.inicio}>
@@ -67,7 +61,7 @@ export default function Perfil(){
                     <View style={style.tabelaDados}>
                         <TextInput
                             value={user.nome}
-                            style={style.dadosPerfil}
+                            style={style.dadosPerfilNome}
                             placeholder="Usuario"
                             placeholderTextColor="#999"
                             autoCapitalize="none"
@@ -150,9 +144,7 @@ export default function Perfil(){
                     <SimpleLineIcons name="notebook" size={35} color="black" />
                 </View>
             </ScrollView>
-            <View style={style.rodape}>
-                <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
-            </View>
+            <Footer />
         </>
     );
 }
@@ -165,7 +157,6 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        paddingHorizontal: 10,
     },
     icon:{
         width: 50,
@@ -188,7 +179,15 @@ const style = StyleSheet.create({
         paddingRight: 20,
     },
     dadosPerfil: {
-        width: 150,
+        width: 110,
+        display: 'flex',
+        fontFamily: 'Poppins',
+        fontSize: 14,
+        fontWeight: '400',
+        color: '#666',
+    },
+    dadosPerfilNome:{
+        width: 220,
         display: 'flex',
         fontFamily: 'Poppins',
         fontSize: 14,
@@ -216,7 +215,7 @@ const style = StyleSheet.create({
         paddingTop: 24
     },
     buttonEdit_1:{
-        paddingLeft:20,
+        paddingLeft:5,
     },
     perfil:{
         flexGrow: 1,
