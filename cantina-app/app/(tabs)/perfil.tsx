@@ -6,7 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useState } from 'react';
 import { Link } from 'expo-router';
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-import Footer from '@/components/rodape/footer';
+import Layout from '@/components/ui/Layout'
 
 const DATA = [
   {
@@ -40,7 +40,7 @@ export default function Perfil(){
         }));
         };
     return(
-        <>
+        <Layout>
             <View style={style.header}>
                     <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
                     <Text style={style.texto}>Cantina</Text>
@@ -144,8 +144,7 @@ export default function Perfil(){
                     <SimpleLineIcons name="notebook" size={35} color="black" />
                 </View>
             </ScrollView>
-            <Footer />
-        </>
+        </Layout>
     );
 }
 const style = StyleSheet.create({

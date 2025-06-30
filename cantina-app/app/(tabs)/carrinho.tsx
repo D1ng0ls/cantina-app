@@ -7,7 +7,7 @@ import { Link } from 'expo-router';
 import { FlatList, Image, StyleSheet, TouchableOpacity, View, StatusBar} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Footer from '@/components/rodape/footer';
+import Layout from '@/components/ui/Layout'
 
 const DATA = [
   {
@@ -61,7 +61,7 @@ const calcularValorTotal = () => {
 
 export default function Carrinho(){
     return(
-        <>
+        <Layout>
             <View style={style.header}>
                 <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
                 <Text style={style.texto}>Cantina</Text>
@@ -107,8 +107,7 @@ export default function Carrinho(){
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-            <Footer />
-        </>
+        </Layout>
     )
 }
 const style = StyleSheet.create({
