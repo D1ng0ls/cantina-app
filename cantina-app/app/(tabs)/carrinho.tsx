@@ -1,13 +1,12 @@
+import Header from '@/components/cabeçalho/header';
+import Layout from '@/components/ui/Layout';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
-import { Text } from '@react-navigation/elements';
-import { ScrollView } from 'react-native';
-import React from 'react';
-import { Link } from 'expo-router';
-import { FlatList, Image, StyleSheet, TouchableOpacity, View, StatusBar} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Footer from '@/components/rodape/footer';
+import { Text } from '@react-navigation/elements';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Link } from 'expo-router';
+import React from 'react';
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const DATA = [
   {
@@ -61,11 +60,8 @@ const calcularValorTotal = () => {
 
 export default function Carrinho(){
     return(
-        <>
-            <View style={style.header}>
-                <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
-                <Text style={style.texto}>Cantina</Text>
-            </View>
+        <Layout>
+            <Header />
             <ScrollView contentContainerStyle={style.main}>
                 <View style={style.inicio}>
                     <Link href='/'>
