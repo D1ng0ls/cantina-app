@@ -9,52 +9,48 @@ import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-nati
 import Layout from '@/components/ui/Layout'
 
 const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    nome: 'Bruno Takeo Açano',
-    email: 'lucario123@gmail.com',
-    senha: '12345678',
-    cartao: '1234',
-  }
+    {
+        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        nome: 'Bruno Takeo Açano',
+        email: 'lucario123@gmail.com',
+        senha: '12345678',
+        cartao: '1234',
+    }
 ];
 
-export default function Perfil(){
-    
-      const [showPassword, setShowPassword] = useState(false);
+export default function Perfil() {
 
-      const [user, setUser] = useState(DATA[0]);
+    const [showPassword, setShowPassword] = useState(false);
 
-      type Field = 'nome' | 'email' | 'senha' | 'cartao';
+    const [user, setUser] = useState(DATA[0]);
 
-      const [editMode, setEditMode] = useState({
+    type Field = 'nome' | 'email' | 'senha' | 'cartao';
+
+    const [editMode, setEditMode] = useState({
         nome: false,
         email: false,
         senha: false,
         cartao: false,
-      });
+    });
 
-        const handleEdit = (field:Field) => {
+    const handleEdit = (field: Field) => {
         setEditMode((prevState) => ({
             ...prevState,
             [field]: !prevState[field],
         }));
-        };
-    return(
+    };
+    return (
         <Layout>
-            <View style={style.header}>
-                    <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
-                    <Text style={style.texto}>Cantina</Text>
-            </View>
-             <ScrollView contentContainerStyle={style.perfil} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={style.perfil} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                 <View style={style.inicio}>
                     <Link href='/'>
                         <TouchableOpacity>
                             <AntDesign name="arrowleft" size={24} color="#4CAF50" />
                         </TouchableOpacity>
                     </Link>
-                    
+
                     <View>
-                        <Image source={require('../../assets/images/Perfil/perfil.jpg')} style={style.imagem}/>
+                        <Image source={require('../../assets/images/Perfil/perfil.jpg')} style={style.imagem} />
                     </View>
                 </View>
                 <View style={style.areaTabela}>
@@ -67,10 +63,10 @@ export default function Perfil(){
                             autoCapitalize="none"
                             autoCorrect={false}
                             editable={editMode.nome}
-                            onChangeText={(text) => setUser({...user, nome: text})}
+                            onChangeText={(text) => setUser({ ...user, nome: text })}
                         />
                     </View>
-                    <TouchableOpacity style={style.buttonEdit} onPress={()=> handleEdit('nome')}>
+                    <TouchableOpacity style={style.buttonEdit} onPress={() => handleEdit('nome')}>
                         <FontAwesome name="pencil" size={24} color={editMode.nome ? '#4CAF50' : 'black'} />
                     </TouchableOpacity>
                 </View>
@@ -85,11 +81,11 @@ export default function Perfil(){
                             autoCapitalize="none"
                             autoCorrect={false}
                             editable={editMode.email}
-                            onChangeText={(text) => setUser({...user, email: text})}
+                            onChangeText={(text) => setUser({ ...user, email: text })}
                         />
                     </View>
-                    <TouchableOpacity style={style.buttonEdit} onPress={()=> handleEdit('email')}>
-                        <FontAwesome name="pencil" size={24} color={editMode.email ? '#4CAF50' : 'black'}  />
+                    <TouchableOpacity style={style.buttonEdit} onPress={() => handleEdit('email')}>
+                        <FontAwesome name="pencil" size={24} color={editMode.email ? '#4CAF50' : 'black'} />
                     </TouchableOpacity>
                 </View>
                 <View style={style.areaTabela}>
@@ -103,41 +99,41 @@ export default function Perfil(){
                             autoCapitalize="none"
                             autoCorrect={false}
                             editable={editMode.senha}
-                            onChangeText={(text) => setUser({...user, senha: text})}
+                            onChangeText={(text) => setUser({ ...user, senha: text })}
                         />
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => setShowPassword(!showPassword)}
                             accessibilityLabel="Mostrar ou ocultar senha"
                             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                            >
+                        >
                             <AntDesign name={showPassword ? "eyeo" : "eye"} size={20} color="gray" />
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={style.buttonEdit} onPress={()=> handleEdit('senha')}>
-                        <FontAwesome name="pencil" size={24} color={editMode.senha ? '#4CAF50' : 'black'}  />
+                    <TouchableOpacity style={style.buttonEdit} onPress={() => handleEdit('senha')}>
+                        <FontAwesome name="pencil" size={24} color={editMode.senha ? '#4CAF50' : 'black'} />
                     </TouchableOpacity>
                 </View>
                 <View style={style.tabelaCartao}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>Suas Formas De Pagamento</Text>
-                <View style={style.tabelaCartaoDetalhe}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1}}>
-                        <AntDesign name="creditcard" size={24} color="black" style={{ marginRight: 8 }} />
-                        <Text style={{ marginRight: 8 }}>Cartão 1</Text>
-                        <TextInput
-                            value={user.cartao}
-                            style={style.dadosPerfil}
-                            placeholder="Final: 0000"
-                            placeholderTextColor="#999"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={editMode.cartao}
-                            onChangeText={(text) => setUser({...user, cartao: text})}
-                        />
-                        <TouchableOpacity style={style.buttonEdit_1} onPress={()=> handleEdit('cartao')}>
-                            <FontAwesome name="pencil" size={24} color={editMode.cartao ? '#4CAF50' : 'black'}  />
-                        </TouchableOpacity>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 8 }}>Suas Formas De Pagamento</Text>
+                    <View style={style.tabelaCartaoDetalhe}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                            <AntDesign name="creditcard" size={24} color="black" style={{ marginRight: 8 }} />
+                            <Text style={{ marginRight: 8 }}>Cartão 1</Text>
+                            <TextInput
+                                value={user.cartao}
+                                style={style.dadosPerfil}
+                                placeholder="Final: 0000"
+                                placeholderTextColor="#999"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={editMode.cartao}
+                                onChangeText={(text) => setUser({ ...user, cartao: text })}
+                            />
+                            <TouchableOpacity style={style.buttonEdit_1} onPress={() => handleEdit('cartao')}>
+                                <FontAwesome name="pencil" size={24} color={editMode.cartao ? '#4CAF50' : 'black'} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
                 </View>
                 <View style={style.pedidosList}>
                     <Text>Seus Pedidos</Text>
@@ -148,7 +144,7 @@ export default function Perfil(){
     );
 }
 const style = StyleSheet.create({
-    header:{
+    header: {
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#e1e5e9',
@@ -157,24 +153,24 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
     },
-    icon:{
+    icon: {
         width: 50,
         height: 50,
         resizeMode: 'contain',
     },
-    texto:{
+    texto: {
         color: '#4CAF50',
         fontWeight: 'bold',
         fontSize: 25,
         fontFamily: 'Poppins',
         textAlign: 'center',
     },
-    areaTabela:{
-        flexDirection:'row',
-        paddingLeft:50
+    areaTabela: {
+        flexDirection: 'row',
+        paddingLeft: 50
     },
-    inicio:{
-        flexDirection:'row',
+    inicio: {
+        flexDirection: 'row',
         paddingRight: 20,
     },
     dadosPerfil: {
@@ -185,7 +181,7 @@ const style = StyleSheet.create({
         fontWeight: '400',
         color: '#666',
     },
-    dadosPerfilNome:{
+    dadosPerfilNome: {
         width: 220,
         display: 'flex',
         fontFamily: 'Poppins',
@@ -209,20 +205,20 @@ const style = StyleSheet.create({
         elevation: 2,
         marginVertical: 10,
     },
-    buttonEdit:{
-        paddingLeft:20,
+    buttonEdit: {
+        paddingLeft: 20,
         paddingTop: 24
     },
-    buttonEdit_1:{
-        paddingLeft:5,
+    buttonEdit_1: {
+        paddingLeft: 5,
     },
-    perfil:{
+    perfil: {
         flexGrow: 1,
         alignItems: 'center',
         padding: 20,
         paddingBottom: 40,
     },
-    imagem:{
+    imagem: {
         width: 200,
         height: 200,
     },
@@ -241,7 +237,7 @@ const style = StyleSheet.create({
         borderColor: '#e1e5e9',
         padding: 10,
     },
-    pedidosList:{
+    pedidosList: {
         backgroundColor: '#4CAF50',
         justifyContent: 'center',
         alignItems: 'center',
@@ -249,7 +245,7 @@ const style = StyleSheet.create({
         height: 200,
         borderRadius: 12,
     },
-    rodape:{
+    rodape: {
         flexDirection: 'row-reverse',
     }
 })

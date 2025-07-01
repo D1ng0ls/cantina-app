@@ -1,4 +1,3 @@
-import Header from '@/components/cabeçalho/header';
 import Layout from '@/components/ui/Layout';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -61,7 +60,6 @@ const calcularValorTotal = () => {
 export default function Carrinho(){
     return(
         <Layout>
-            <Header />
             <ScrollView contentContainerStyle={style.main}>
                 <View style={style.inicio}>
                     <Link href='/'>
