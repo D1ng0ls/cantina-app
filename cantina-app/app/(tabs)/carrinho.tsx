@@ -8,6 +8,7 @@ import { FlatList, Image, StyleSheet, TouchableOpacity, View, StatusBar} from 'r
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Footer from '@/components/rodape/footer';
+import Header from '@/components/cabeçalho/header';
 
 const DATA = [
   {
@@ -62,10 +63,7 @@ const calcularValorTotal = () => {
 export default function Carrinho(){
     return(
         <>
-            <View style={style.header}>
-                <Image source={require('../../assets/images/Perfil/ifsp_logo.png')} style={style.icon} />
-                <Text style={style.texto}>Cantina</Text>
-            </View>
+            <Header/>
             <ScrollView contentContainerStyle={style.main}>
                 <View style={style.inicio}>
                     <Link href='/'>
@@ -112,17 +110,8 @@ export default function Carrinho(){
     )
 }
 const style = StyleSheet.create({
-    header:{
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#e1e5e9',
-        height: 100,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        paddingHorizontal: 10,
-    },
     main:{
+        backgroundColor: '#ffffff',
         fontFamily: 'Poppins',
         flexGrow: 1,
         padding: 20,
