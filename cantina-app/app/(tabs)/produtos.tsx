@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Layout from '@/components/ui/Layout'
 
 export default function Produtos() {
 
@@ -131,7 +132,7 @@ export default function Produtos() {
   }
   
   return (
-    <>  
+    <Layout>  
       <View style={styles.products}>
         <FlatList
           renderItem={({ item, index }) => (
@@ -149,7 +150,7 @@ export default function Produtos() {
           windowSize={10}
         />
       </View>
-    </>
+    </Layout>
   )
 }
 

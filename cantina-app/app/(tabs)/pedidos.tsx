@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import Layout from '@/components/ui/Layout'
 
 export default function Pedidos() {
 
@@ -157,7 +158,7 @@ export default function Pedidos() {
   }
   
   return (
-    <>  
+    <Layout>  
       <View style={styles.orders}>
         <Text style={styles.ordersTitle}>Seus Pedido</Text>
 
@@ -174,7 +175,7 @@ export default function Pedidos() {
           windowSize={10}
         />
       </View>
-    </>
+    </Layout>
   )
 }
 
