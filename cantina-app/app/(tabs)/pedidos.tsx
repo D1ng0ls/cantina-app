@@ -123,7 +123,7 @@ export default function Pedidos() {
   }
   
   return (
-    <>  
+    <Layout>  
       <View style={styles.orders}>
         <Text style={styles.ordersTitle}>Seus Pedido</Text>
 
@@ -174,7 +174,7 @@ export default function Pedidos() {
           </View>
         </Modal>
       </View>
-    </>
+    </Layout>
   )
 }
 

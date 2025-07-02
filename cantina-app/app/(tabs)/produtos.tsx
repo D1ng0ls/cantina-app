@@ -176,7 +176,7 @@ export default function Produtos() {
   }
   
   return (
-    <>  
+    <Layout>  
       <View style={styles.products}>
         {
           categories.map((category) => (
@@ -199,14 +199,6 @@ export default function Produtos() {
           ))
         }
       </View>
-
-      {
-        modalVisible && (
-          <TouchableOpacity onPress={handleCreateOrder} style={styles.modalButton}>
-            <Text style={styles.modalButtonText}>FINALIZAR PEDIDO</Text>
-          </TouchableOpacity>
-        )
-      }
     </>
   )
 }

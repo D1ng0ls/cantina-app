@@ -323,6 +323,14 @@ const style = StyleSheet.create({
     password: {
         width: '100%'
     },
+    areaTabela: {
+        flexDirection: 'row',
+        paddingLeft: 50
+    },
+    inicio: {
+        flexDirection: 'row',
+        paddingRight: 20,
+    },
     dadosPerfil: {
         fontFamily: 'Poppins',
         fontSize: 14,
@@ -342,7 +350,14 @@ const style = StyleSheet.create({
         elevation: 2,
         marginVertical: 10,
     },
-    perfil:{
+    buttonEdit: {
+        paddingLeft: 20,
+        paddingTop: 24
+    },
+    buttonEdit_1: {
+        paddingLeft: 5,
+    },
+    perfil: {
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -355,7 +370,7 @@ const style = StyleSheet.create({
         marginHorizontal: 'auto',
         marginBottom: 10
     },
-    pedidosList:{
+    pedidosList: {
         backgroundColor: '#4CAF50',
         justifyContent: 'center',
         alignItems: 'center',
