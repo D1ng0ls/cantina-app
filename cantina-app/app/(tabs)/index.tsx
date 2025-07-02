@@ -1,46 +1,21 @@
-import * as Font from 'expo-font';
-import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Link } from 'expo-router'
+import { Text, View } from 'react-native'
 
-export default function HomeScreen() {
-
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync({
-        Poppins: require('../../assets/fonts/Poppins-Regular.ttf'),
-      });
-      setFontsLoaded(true);
-    }
-
-    loadFonts();
-  }, []);
-
-  if (!fontsLoaded) return null;
-
+export default function Index() {
   return (
-    <>
-      <View>
-        <Text>Tela principal</Text>
+    <View>
+      <Text>Tela principal</Text>
 
-        <Text style={{ fontFamily: 'Poppins', fontSize: 18 }}>
-          Texto com fonte Poppins
-        </Text>
-        
-        <Link href='/login'>Logar</Link>
-        
-        <Link href='/perfil'>Perfil</Link>
-        
-        <Link href='/register'>Registrar</Link>
+      <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 18 }}>
+        Texto com fonte Poppins
+      </Text>
 
-        <Link href='/produtos'>Produtos</Link>
-
-        <Link href='/carrinho'>Carrinho</Link>
-
-        <Link href='/pedidos'>Pedidos</Link>
-      </View>
-    </>
-  );
+      <Link href='/login'>Logar</Link>
+      <Link href='/perfil'>Perfil</Link>
+      <Link href='/register'>Registrar</Link>
+      <Link href='/produtos'>Produtos</Link>
+      <Link href='/carrinho'>Carrinho</Link>
+      <Link href='/pedidos'>Pedidos</Link>
+    </View>
+  )
 }

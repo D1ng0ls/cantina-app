@@ -1,138 +1,104 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '../hooks/useAuth';
+
+interface User {
+  id: number
+  name: string
+}
+
+interface Product {
+  id: number  
+  nome: string
+  quantidade: number
+  valor_unitario: number
+}
+
+interface Order {
+  id: number
+  valor_total: number
+  status: string
+  usuario: User
+  produtos: Product[]
+}
+
+interface OrderCardProps {
+  pedido: Order
+  isEven: boolean
+}
 
 export default function Pedidos() {
 
-  const pedidosData = [
-    {
-      id: 1,
-      valor_total: 25.50,
-      status: "aberto",
-      usuario: {
-        id: 1,
-        name: "Carlos Silva"
-      },
-      produtos: [
-        {
-          id: 1,
-          nome: "Coxinha",
-          quantidade: 2,
-          valor_unitario: 5.00
-        },
-        {
-          id: 2,
-          nome: "Suco de Laranja",
-          quantidade: 1,
-          valor_unitario: 15.50
-        },
-        {
-          id: 3,
-          nome: "Energético",
-          quantidade: 1,
-          valor_unitario: 11.50
-        },
-        {
-          id: 4,
-          nome: "Chiclete",
-          quantidade: 5,
-          valor_unitario: 1
-        }
-      ]
-    },
-    {
-      id: 2,
-      valor_total: 12.00,
-      status: "fechado",
-      usuario: {
-        id: 1,
-        name: "Carlos Silva"
-      },
-      produtos: [
-        {
-          id: 3,
-          nome: "Pão de Queijo",
-          quantidade: 3,
-          valor_unitario: 4.00
-        }
-      ]
-    },
-    {
-      id: 3,
-      valor_total: 18.00,
-      status: "aberto",
-      usuario: {
-        id: 1,
-        name: "Carlos Silva"
-      },
-      produtos: [
-        {
-          id: 4,
-          nome: "Refrigerante",
-          quantidade: 2,
-          valor_unitario: 6.00
-        },
-        {
-          id: 5,
-          nome: "Brigadeiro",
-          quantidade: 2,
-          valor_unitario: 3.00
-        }
-      ]
-    },
-    {
-      id: 4,
-      valor_total: 30.00,
-      status: "fechado",
-      usuario: {
-        id: 1,
-        name: "Carlos Silva"
-      },
-      produtos: [
-        {
-          id: 6,
-          nome: "Pastel de Queijo",
-          quantidade: 2,
-          valor_unitario: 7.50
-        },
-        {
-          id: 7,
-          nome: "Suco Natural",
-          quantidade: 1,
-          valor_unitario: 15.00
-        }
-      ]
+  const { token, isAuthenticated } = useAuth()
+  
+  const [orders, setOrders] = useState<Order[]>([])
+
+  const [modalVisible, setModalVisible] = useState(false)
+  
+  const [orderSelected, setOrderSelected] = useState<Order | null>(null)
+
+  const router = useRouter()
+  
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/login')
     }
-  ]
+  }, [isAuthenticated])
 
-  interface Usuario {
-    id: number
-    name: string
-  }
+  useEffect(() => {
+    
+    const fetchOrders = async () => {
+      
+      if (!token) return
 
-  interface Produto {
-    id: number
-    nome: string
-    quantidade: number
-    valor_unitario: number
-  }
+      try {
+        
+        const response = await fetch('https://cantinaapi.dingols.com.br/api/cantina/orders/user', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          }
+        })
+  
+        const data = await response.json()
 
-  interface Pedido {
-    id: number
-    valor_total: number
-    status: string
-    usuario: Usuario
-    produtos: Produto[]
-  }
+        console.log(data)
+        
+        if (response.ok) {
+          setOrders(data.data)
+        }
+        else {
+          console.error('Erro ao buscar pedidos:', data)
+        }
+      }
+      catch (error) {
+        console.error('Erro inesperado:', error)
+      }
+    }
 
-  interface PedidoCardProps {
-    pedido: Pedido
-    isEven: boolean
-  }
+    fetchOrders()
+  }, [token])  
 
-  const PedidoCard: React.FC<PedidoCardProps> = ({ pedido, isEven }) => {
+  const openOder = (pedido: Order) => {
+    setOrderSelected(pedido);
+    setModalVisible(true);
+  };
+
+  const closeOrder = () => {
+    setModalVisible(false);
+    setOrderSelected(null);
+  };
+
+  const PedidoCard: React.FC<OrderCardProps> = ({ pedido, isEven }) => {
     return (
-      <View style={[styles.order, isEven ? styles.orderEven : styles.orderOdd]}>
+      <TouchableOpacity
+        onPress={() => openOder(pedido)}
+        style={[styles.order, isEven ? styles.orderEven : styles.orderOdd]}
+      >
         <View style={styles.orderHeader}>
           <Text style={styles.orderHeaderId}>{pedido.id}</Text>
           <Text style={styles.orderHeaderPrice}>R${pedido.valor_total.toFixed(2)}</Text>
@@ -143,16 +109,16 @@ export default function Pedidos() {
         <View style={styles.orderFooter}>
           <Text style={styles.orderFooterItem} numberOfLines={1} ellipsizeMode="tail">
             {
-              pedido.produtos.map((produto, index) => {
+              pedido.produtos.map((produto: Product, index: number) => {
                 const isLast = index === pedido.produtos.length - 1
                 return `${produto.quantidade}x ${produto.nome}${!isLast ? ', ' : ''}`
               }).join('')
             }
           </Text>
-          
+          z
           <Ionicons name="eye-outline" size={18} color="#000" style={styles.orderFooterIcon}/>
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
   
@@ -166,13 +132,47 @@ export default function Pedidos() {
             <PedidoCard pedido={item} isEven={index % 2 === 0} />
           )}    
           keyExtractor={(item) => item.id.toString()}                
-          data={pedidosData}        
+          data={orders}        
           style={styles.ordersList}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
           removeClippedSubviews={true}
           windowSize={10}
         />
+
+        <Modal
+          visible={modalVisible}
+          animationType="fade"
+          transparent={true}
+          onRequestClose={closeOrder}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.modalCard}>
+              <Text style={styles.modalCardNumber}>Pedido #{orderSelected?.id}</Text>
+              
+              <Text style={styles.modalCardStatus}>Status: {orderSelected?.status}</Text>
+              
+              <Text style={styles.modalCardValue}>Valor Total: R${orderSelected?.valor_total.toFixed(2)}</Text>
+
+              <Text style={styles.modalCardProductTitle}>Produtos:</Text>
+              
+              <ScrollView style={{ marginTop: 10 }}>
+                {
+                  orderSelected?.produtos.map(produto => (
+                    <View key={produto.id} style={{ marginBottom: 10 }}>
+                      <Text style={styles.modalCardProductText}>{produto.quantidade}x {produto.nome}</Text>
+                      <Text style={styles.modalCardProductText}>Valor unitário: R${produto.valor_unitario.toFixed(2)}</Text>
+                    </View>
+                  ))
+                }
+              </ScrollView>
+
+              <Pressable onPress={closeOrder}>
+                <Text style={styles.modalCardButton}>Fechar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
     </>
   )
@@ -235,5 +235,57 @@ const styles = StyleSheet.create({
   orderFooterIcon: {
     marginVertical: 'auto',
     alignItems: 'center'
+  },
+  modalBackground: {
+    flex: 1, 
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, .5)' 
+  },
+  modalCard: {
+    maxHeight: '80%',
+    padding: 20, 
+    margin: 20, 
+    borderRadius: 10, 
+    backgroundColor: '#FFF'
+  },
+  modalCardNumber: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 18, 
+    lineHeight: 18,
+    paddingBottom: 25
+  },
+  modalCardStatus: {
+    fontFamily: 'Poppins',
+    fontSize: 13, 
+    lineHeight: 16,
+  },
+  modalCardValue: {
+    fontFamily: 'Poppins',
+    fontSize: 13, 
+    lineHeight: 16,
+  },
+  modalCardProductTitle: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    lineHeight: 14,
+    paddingTop: 25,
+    paddingBottom: 5
+  },
+  modalCardProductText: {
+    fontFamily: 'Poppins',
+    fontSize: 13, 
+    lineHeight: 16,
+  },
+  modalCardButton: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 13,
+    lineHeight: 13,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    marginTop: 10,
+    paddingVertical: 15,
+    borderRadius: 8,
+    color: '#FFF',
+    backgroundColor: 'rgba(50, 152, 77, .5)'
   }
 })

@@ -1,19 +1,87 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Text } from '@react-navigation/elements';
-import { Link, Stack } from 'expo-router';
-import React, { useState } from 'react';
-import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { Text } from '@react-navigation/elements'
+import { Link, useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react'
+import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Register() {
+
+  const [name, setName] = useState('')
+  
+  const [email, setEmail] = useState('')
+  
+  const [studentId, setStudentId] = useState('')
 
   const [password, setPassword] = useState('')
 
   const [showPassword, setShowPassword] = useState(false)
+
+  const [modalVisible, setModalVisible] = useState(false)
+  
+  const [modalMessage, setModalMessage] = useState('')
+
+  const { login, isAuthenticated } = useAuth()
+  
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/produtos')
+    }
+  }, [isAuthenticated])
+
+  const handleRegister = async () => {
+    
+    if (!name || !email || !studentId || !password) {
+      setModalMessage('Por favor, preencha todos os campos.')
+  
+      setModalVisible(true)
+  
+      return
+    }
+
+    try {
+      
+      let body = {
+        'name': name,
+        'email': email,
+        'student_id': studentId,
+        'password': password,
+        'password_confirmation': password
+      }
+
+      const response = await fetch('https://cantinaapi.dingols.com.br/api/cantina/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setModalMessage(data.message)
+        
+        setModalVisible(true)
+
+        await login(data.token)
+      } 
+      else {
+        setModalMessage(data.message)
+        setModalVisible(true)
+      }
+    } 
+    catch (error) {
+      setModalMessage('Erro ao conectar com o servidor.')
+      setModalVisible(true)
+    }
+  }
   
   return (
     <>
-      <Stack.Screen options={{ headerShown: false }} />
-
       <View style={styles.login}>
         <View style={styles.loginLogo}>
           <Image source={require('../../assets/images/Login/if-icon.png')} />
@@ -35,6 +103,8 @@ export default function Register() {
                 style={styles.loginFormIcon} 
               />
               <TextInput
+                value={name}
+                onChangeText={setName}  
                 style={styles.loginFormInput}
                 placeholder="Digite seu nome"
                 placeholderTextColor="#999"
@@ -55,6 +125,8 @@ export default function Register() {
                 style={styles.loginFormIcon} 
               />
               <TextInput
+                value={email}
+                onChangeText={setEmail}
                 style={styles.loginFormInput}
                 placeholder="Digite seu e-mail"
                 placeholderTextColor="#999"
@@ -75,6 +147,8 @@ export default function Register() {
                 style={styles.loginFormIcon} 
               />
               <TextInput
+                value={studentId}
+                onChangeText={setStudentId}
                 style={styles.loginFormInput}
                 placeholder="Digite seu prontuário"
                 placeholderTextColor="#999"
@@ -99,27 +173,40 @@ export default function Register() {
                 />
               </TouchableOpacity>
               <TextInput
-                style={styles.loginFormInput}
-                placeholder="Digite sua senha"
-                placeholderTextColor="#999"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
+                style={styles.loginFormInput}
+                placeholder="Digite sua senha"
+                placeholderTextColor="#999"
                 autoCapitalize="none"
                 autoCorrect={false}
               />
             </View>
           </View>
 
-          <TouchableOpacity style={styles.loginFormButton}>
+          <TouchableOpacity style={styles.loginFormButton} onPress={handleRegister}>
             <Text style={styles.loginFormButtonText}>ENTRAR</Text>
           </TouchableOpacity>
 
           <Text style={styles.loginFormAccount}>Já tem uma conta? <Link style={styles.loginFormAccountLink} href='/login'>Entre!</Link></Text>
         </View>
       </View>
+
+      {
+        modalVisible && (
+          <View style={styles.modal}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>{modalMessage}</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                <Text style={styles.modalButtonText}>FECHAR</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )
+      }
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -227,5 +314,45 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontSize: 12,
     fontWeight: 'bold'
-  }
-});
+  },
+  modal: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, .5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor: '#FFF',
+  },
+  modalText: {
+    fontFamily: 'Poppins',
+    fontSize: 16,
+    marginBottom: 15,
+    textAlign: 'center',
+    color: '#333',
+  },
+  modalButton: {
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+  },
+  modalButtonText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    color: '#FFF',
+  },
+})
