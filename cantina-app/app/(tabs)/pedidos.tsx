@@ -1,7 +1,8 @@
+import Layout from '@/components/ui/Layout';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
 
 interface User {
@@ -11,17 +12,19 @@ interface User {
 
 interface Product {
   id: number  
-  nome: string
-  quantidade: number
-  valor_unitario: number
+  name: string
+  pivot: {
+    quantity: number
+    value_unitary: string
+  }
 }
 
 interface Order {
   id: number
-  valor_total: number
+  total_value: string
   status: string
-  usuario: User
-  produtos: Product[]
+  created_at: string
+  products: Product[]
 }
 
 interface OrderCardProps {
@@ -66,10 +69,8 @@ export default function Pedidos() {
   
         const data = await response.json()
 
-        console.log(data)
-        
         if (response.ok) {
-          setOrders(data.data)
+          setOrders(data.orders)
         }
         else {
           console.error('Erro ao buscar pedidos:', data)
@@ -101,25 +102,34 @@ export default function Pedidos() {
       >
         <View style={styles.orderHeader}>
           <Text style={styles.orderHeaderId}>{pedido.id}</Text>
-          <Text style={styles.orderHeaderPrice}>R${pedido.valor_total.toFixed(2)}</Text>
+          <Text style={styles.orderHeaderPrice}>R${pedido.total_value}</Text>
         </View>
         
-        <Text  style={styles.orderDate}>Data: 01/01/2025</Text>
+        <Text  style={styles.orderDate}>Data: { new Date(pedido.created_at).toLocaleDateString('pt-BR') }</Text>
         
         <View style={styles.orderFooter}>
           <Text style={styles.orderFooterItem} numberOfLines={1} ellipsizeMode="tail">
             {
-              pedido.produtos.map((produto: Product, index: number) => {
-                const isLast = index === pedido.produtos.length - 1
-                return `${produto.quantidade}x ${produto.nome}${!isLast ? ', ' : ''}`
+              pedido.products.map((produto: Product, index: number) => {
+                const isLast = index === pedido.products.length - 1
+                return `${produto.pivot.quantity}x ${produto.name}${!isLast ? ', ' : ''}`
               }).join('')
             }
           </Text>
-          z
+        
           <Ionicons name="eye-outline" size={18} color="#000" style={styles.orderFooterIcon}/>
         </View>
       </TouchableOpacity>
     )
+  }
+
+  const statusMap: Record<string, string> = {
+    open: 'Aberto',
+    awaiting_payment: 'Aguardando pagamento',
+    approved: 'Aprovado',
+    in_preparation: 'Em preparação',
+    ready: 'Pronto',
+    canceled: 'Cancelado'
   }
   
   return (
@@ -127,18 +137,13 @@ export default function Pedidos() {
       <View style={styles.orders}>
         <Text style={styles.ordersTitle}>Seus Pedido</Text>
 
-        <FlatList
-          renderItem={({ item, index }) => (
-            <PedidoCard pedido={item} isEven={index % 2 === 0} />
-          )}    
-          keyExtractor={(item) => item.id.toString()}                
-          data={orders}        
-          style={styles.ordersList}
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          removeClippedSubviews={true}
-          windowSize={10}
-        />
+        <View style={styles.ordersList}>
+          {
+            orders.map((pedido, index) => (
+              <PedidoCard key={pedido.id} pedido={pedido} isEven={index % 2 === 0} />
+            ))
+          }
+        </View>
 
         <Modal
           visible={modalVisible}
@@ -150,18 +155,18 @@ export default function Pedidos() {
             <View style={styles.modalCard}>
               <Text style={styles.modalCardNumber}>Pedido #{orderSelected?.id}</Text>
               
-              <Text style={styles.modalCardStatus}>Status: {orderSelected?.status}</Text>
+              <Text style={styles.modalCardStatus}>Status: {statusMap[orderSelected?.status || ''] || orderSelected?.status || 'Desconhecido'}</Text>
               
-              <Text style={styles.modalCardValue}>Valor Total: R${orderSelected?.valor_total.toFixed(2)}</Text>
+              <Text style={styles.modalCardValue}>Valor Total: R${parseFloat(orderSelected?.total_value || '0').toFixed(2)}</Text>
 
               <Text style={styles.modalCardProductTitle}>Produtos:</Text>
               
               <ScrollView style={{ marginTop: 10 }}>
                 {
-                  orderSelected?.produtos.map(produto => (
+                  orderSelected?.products.map(produto => (
                     <View key={produto.id} style={{ marginBottom: 10 }}>
-                      <Text style={styles.modalCardProductText}>{produto.quantidade}x {produto.nome}</Text>
-                      <Text style={styles.modalCardProductText}>Valor unitário: R${produto.valor_unitario.toFixed(2)}</Text>
+                      <Text style={styles.modalCardProductText}>{produto.pivot.quantity}x {produto.name}</Text>
+                      <Text style={styles.modalCardProductText}>Valor unitário: R${parseFloat(produto.pivot.value_unitary).toFixed(2)}</Text>
                     </View>
                   ))
                 }
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontSize: 24,
     textAlign: 'center',
-    paddingVertical: 60
+    paddingVertical: 40
   },
   ordersList: {
     flex: 1,

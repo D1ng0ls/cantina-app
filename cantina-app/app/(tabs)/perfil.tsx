@@ -1,3 +1,4 @@
+import Layout from '@/components/ui/Layout';
 import { Text } from '@react-navigation/elements';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -113,13 +114,8 @@ export default function Perfil() {
 
     const handleLogout = async () => {
 
-        try {
-            setModalMessage('Saindo.')
-            
-            setModalVisible(true)
-            
+        try {            
             await logout()
-
             router.replace('/login')
         } 
         catch (error) {
@@ -190,7 +186,7 @@ export default function Perfil() {
     }
             
     return (
-        <>
+        <Layout>
             <ScrollView contentContainerStyle={style.perfil} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>               
                 <View>
                     <Image source={require('../../assets/images/Perfil/perfil.jpg')} style={style.imagem}/>
@@ -301,7 +297,7 @@ export default function Perfil() {
                     </View>
                 )
             }
-        </>
+        </Layout>
     )
 }
 

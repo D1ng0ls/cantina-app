@@ -1,7 +1,8 @@
+import Layout from '@/components/ui/Layout'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { Alert, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAuth } from '../hooks/useAuth'
 
 interface Product {
@@ -82,19 +83,19 @@ export default function Produtos() {
     try {
 
       const selectedProducts = Object
-      .entries(quantities)
-      .filter(([_, quantity]) => quantity > 0)
-      .map(([id, quantity]) => {
-        const product = categories.flatMap(c => c.products).find(p => p.id === Number(id))
-        return {
-          id: product?.id,
-          name: product?.name,
-          description: product?.description,
-          quantity,
-          price: product?.price,
-          stock: product?.quantity
-        }
-      })
+        .entries(quantities)
+        .filter(([_, quantity]) => quantity > 0)
+        .map(([id, quantity]) => {
+          const product = categories.flatMap(c => c.products).find(p => p.id === Number(id))
+          return {
+            id: product?.id,
+            name: product?.name,
+            description: product?.description,
+            quantity,
+            price: product?.price,
+            stock: product?.quantity
+          }
+        })
 
       await AsyncStorage.setItem('@pedido', JSON.stringify(selectedProducts))
 
@@ -180,40 +181,42 @@ export default function Produtos() {
       <View style={styles.products}>
         {
           categories.map((category) => (
-            <FlatList
-              key={category.id}
-              data={category.products}                              
-              keyExtractor={(item) => item.id.toString()}                
-              renderItem={({ item, index }) => (
-                <ItemCard item={item} isEven={index % 2 === 0} />
-              )}
-              ListHeaderComponent={() => (
-                <Text style={styles.productsTitle}>{category.name}</Text>
-              )}      
-              style={styles.productsList}
-              showsVerticalScrollIndicator={false}
-              scrollEventThrottle={16}
-              removeClippedSubviews={true}  
-              windowSize={10}
-            />
+            <View key={category.id}>
+              <Text style={styles.productsTitle}>{category.name}</Text>
+              {
+                category.products.map((item, index) => (
+                  <ItemCard key={item.id} item={item} isEven={index % 2 === 0} />
+                ))
+              }
+            </View>
           ))
         }
       </View>
-    </>
+      
+      {
+        modalVisible && (
+          <TouchableOpacity onPress={handleCreateOrder} style={styles.modalButton}>
+            <Text style={styles.modalButtonText}>FINALIZAR PEDIDO</Text>
+          </TouchableOpacity>
+        )
+      }
+    </Layout>
   )
 }
 
 const screenWidth = Dimensions.get('window').width
 
+const screenHeight = Dimensions.get('window').height
+
 const styles = StyleSheet.create({
   products: {
-    flex: 1
+    flexGrow: 1
   },
   productsTitle: {
     fontFamily: 'Poppins',
     fontSize: 24,
     textAlign: 'center',
-    paddingVertical: 60
+    paddingVertical: 40
   },
   productsList: {
     flex: 1,
@@ -273,7 +276,8 @@ const styles = StyleSheet.create({
   },
   productDescription: {
     fontFamily: 'Poppins',
-    fontSize: 12
+    fontSize: 10,
+    lineHeight: 11
   },
   productCart: {
     width: '100%',
@@ -330,7 +334,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     position: 'absolute',
-    bottom: 20,
+    top: screenHeight - 192,
     left: '50%',
     transform: [{ translateX: -0.5 * 250 }],
     width: 250,    

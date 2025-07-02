@@ -1,3 +1,4 @@
+import Layout from '@/components/ui/Layout';
 import { Ionicons } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -6,7 +7,7 @@ import { Text } from '@react-navigation/elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
 
 type ItemProps = {
@@ -58,6 +59,53 @@ export default function Carrinho(){
 
         fetchOrder()
     }, [])
+
+    const handleCreateOrder = async () => {
+        
+        if (!token) return
+
+        try {
+
+            const formattedProducts = products.map(product => ({
+                id: product.id,
+                quantity: product.quantity
+            }))
+
+            const body = {
+                products: formattedProducts
+            }
+
+            const response = await fetch('https://cantinaapi.dingols.com.br/api/cantina/orders', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(body)
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                await AsyncStorage.removeItem('@pedido')
+
+                Alert.alert('Sucesso', 'Pedido criado com sucesso!', [
+                    {
+                        text: 'OK',
+                        onPress: () => router.replace('/pedidos')
+                    }
+                ])
+            } 
+            else {
+                Alert.alert('Erro ao criar pedido.')
+            }
+        } 
+        catch (error) {
+            Alert.alert('Erro', 'Erro ao conectar com o servidor.')
+        }
+    }
+
 
     const updateQuantity = (delta: number) => {
         setSelectedProduct((prev: any) => {
@@ -134,7 +182,7 @@ export default function Carrinho(){
     )
 
     return(
-        <>
+        <Layout>
             {
                 products.length ? (
                     <ScrollView contentContainerStyle={style.main}>
@@ -158,7 +206,7 @@ export default function Carrinho(){
                         />
                         
                          <LinearGradient
-                            colors={['#FFFFFF', '#32984D', '#FFFFFF']}
+                            colors={['#F2F2F2', '#32984D', '#F2F2F2']}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 0 }}
                             style={style.linha}
@@ -173,7 +221,7 @@ export default function Carrinho(){
                         </View>
                         
                         <LinearGradient
-                            colors={['#FFFFFF', '#32984D', '#FFFFFF']}
+                            colors={['#F2F2F2', '#32984D', '#F2F2F2']}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 0 }}
                             style={style.linha}
@@ -190,6 +238,10 @@ export default function Carrinho(){
                                 <FontAwesome6 name="pix" size={30} color="#32984D" />
                             </TouchableOpacity>
                         </View>
+
+                        <TouchableOpacity style={style.buttonConfirm} onPress={handleCreateOrder}>
+                            <Text style={style.buttonConfirmText}>REALIZAR PEDIDO</Text>
+                        </TouchableOpacity>
                     </ScrollView>
                     
                 ) : (
@@ -232,9 +284,11 @@ export default function Carrinho(){
                     </View>
                 )
             }
-        </>
+        </Layout>
     )
 }
+
+const screenHeight = Dimensions.get('window').height
 
 const style = StyleSheet.create({
     main: {
@@ -242,8 +296,7 @@ const style = StyleSheet.create({
         flexGrow: 1,
         paddingVertical: 20,
         alignItems: 'center',
-        paddingBottom: 40,
-        backgroundColor: 'white'
+        paddingBottom: 40
     },
     item: {
         width: '100%',
@@ -261,6 +314,7 @@ const style = StyleSheet.create({
     },
     productsList: {
         width: '100%',
+        marginBottom: 20
     },
     itemName: {
         width: '60%',
@@ -323,7 +377,7 @@ const style = StyleSheet.create({
         fontFamily: 'Poppins',
         fontSize: 24,
         textAlign: 'center',
-        paddingVertical: 60
+        paddingVertical: 40
     },
     bottomTitle: {
         fontFamily: 'Poppins',
@@ -337,7 +391,7 @@ const style = StyleSheet.create({
         gap: 25
     },
     emptyCart: {
-        height: '100%',
+        height: screenHeight - 128,
         padding: 40,
         alignItems: 'center',
         justifyContent: 'center'
@@ -432,5 +486,19 @@ const style = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 15,
         backgroundColor: '#D54A4A', 
-    }
+    },
+     buttonConfirm: {
+        width: 180,
+        borderRadius: 8,
+        alignItems: 'center',
+        paddingVertical: 15,
+        marginTop: 40,
+        backgroundColor: '#4CAF50',
+    },
+    buttonConfirmText: {
+        fontFamily: 'Poppins-SemiBold',
+        fontSize: 14,
+        lineHeight: 14,
+        color: '#fff',
+    },
 })

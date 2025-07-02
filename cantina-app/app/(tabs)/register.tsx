@@ -17,6 +17,8 @@ export default function Register() {
 
   const [showPassword, setShowPassword] = useState(false)
 
+  const [registerSuccess, setRegisterSuccess] = useState(false)
+  
   const [modalVisible, setModalVisible] = useState(false)
   
   const [modalMessage, setModalMessage] = useState('')
@@ -26,7 +28,7 @@ export default function Register() {
   const router = useRouter()
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !registerSuccess) {
       router.replace('/produtos')
     }
   }, [isAuthenticated])
@@ -64,13 +66,22 @@ export default function Register() {
 
       if (response.ok) {
         setModalMessage(data.message)
+
+        setRegisterSuccess(true)
         
         setModalVisible(true)
 
         await login(data.token)
       } 
       else {
-        setModalMessage(data.message)
+        const emailError = data.errors.email
+        
+        const studentIdError = data.errors.student_id
+
+        const passwordError = data.errors.password
+        
+        setModalMessage([emailError, studentIdError, passwordError].filter(Boolean).join(' & '));
+
         setModalVisible(true)
       }
     } 
@@ -198,7 +209,16 @@ export default function Register() {
           <View style={styles.modal}>
             <View style={styles.modalContent}>
               <Text style={styles.modalText}>{modalMessage}</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+              <TouchableOpacity 
+                onPress={() => {
+                  setModalVisible(false)
+                  if (registerSuccess) {
+                    setRegisterSuccess(false)
+                    router.replace('/produtos')
+                  }
+                }} 
+                style={styles.modalButton}
+              >
                 <Text style={styles.modalButtonText}>FECHAR</Text>
               </TouchableOpacity>
             </View>
